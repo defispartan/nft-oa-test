@@ -11,6 +11,7 @@ const lensClient = new LensClient({
 const nftOpenActionKit = new NftOpenActionKit({
   decentApiKey: import.meta.env.VITE_DECENT_API_KEY || "",
   raribleApiKey: import.meta.env.VITE_RARIBLE_API_KEY || "",
+  openSeaApiKey: import.meta.env.VITE_OPENSEA_API_KEY || "",
 });
 
 function App() {
