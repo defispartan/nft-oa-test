@@ -45,7 +45,10 @@ function App() {
   const handleDetect = async () => {
     try {
       setLoadingInitialize(true);
-      const result = await nftOpenActionKit.detectAndReturnCalldata(nftLink);
+      const result = await nftOpenActionKit.detectAndReturnCalldata({
+        contentURI: nftLink,
+        publishingClientProfileId: "10",
+      });
       setActionData(result || "No action data found");
     } catch (err) {
       setActionData("Error: " + err);
@@ -58,8 +61,8 @@ function App() {
       if (publication) {
         const [profileHex, pubHex] = publication.id.split("-");
         setLoadingAct(true);
-        const result = await nftOpenActionKit.actionDataFromPost(
-          {
+        const result = await nftOpenActionKit.actionDataFromPost({
+          post: {
             profileId: parseInt(profileHex, 16).toString(),
             actionModules: [publication.openActionModules[0].contract.address],
             actionModulesInitDatas: [
@@ -67,13 +70,16 @@ function App() {
             ],
             pubId: parseInt(pubHex, 16).toString(),
           },
-          "10859",
-          "0x354cd122a1b3ebf102306f6bccccf8abebaff708",
-          "0x354cd122a1b3ebf102306f6bccccf8abebaff708",
-          "137",
-          BigInt(1),
-          "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270"
-        );
+          profileId: "10859",
+          senderAddress: "0x354cd122a1b3ebf102306f6bccccf8abebaff708",
+          profileOwnerAddress: "0x354cd122a1b3ebf102306f6bccccf8abebaff708",
+          srcChainId: "137",
+          quantity: 1,
+          paymentToken: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+          executingClientProfileId: "10",
+        });
+        console.log("RESULT");
+        console.log(result);
         const resultStr = JSON.stringify(result, (_, value) =>
           typeof value === "bigint" ? value.toString() : value
         );
