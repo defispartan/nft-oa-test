@@ -23,6 +23,7 @@ function App() {
   const [publication, setPublication] = useState<any | null>(null);
   const [loadingInitialize, setLoadingInitialize] = useState<boolean>(false);
   const [loadingAct, setLoadingAct] = useState<boolean>(false);
+  const [sourceUrl, setSourceUrl] = useState<string | undefined>();
 
   useEffect(() => {
     const fetchPublicationData = async () => {
@@ -77,9 +78,8 @@ function App() {
           quantity: 1,
           paymentToken: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
           executingClientProfileId: "10",
+          sourceUrl,
         });
-        console.log("RESULT");
-        console.log(result);
         const resultStr = JSON.stringify(result, (_, value) =>
           typeof value === "bigint" ? value.toString() : value
         );
@@ -114,6 +114,12 @@ function App() {
           value={postLink}
           onChange={(e) => setPostLink(e.target.value)}
           placeholder="Enter hey.xyz post link"
+        />
+        <input
+          type="text"
+          value={sourceUrl}
+          onChange={(e) => setSourceUrl(e.target.value)}
+          placeholder="Enter NFT link"
         />
         <button className="query" onClick={handlePostAction}>
           Get Action Data
