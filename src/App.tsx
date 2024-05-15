@@ -18,10 +18,12 @@ function App() {
   const [nftLink, setNftLink] = useState("");
   const [postLink, setPostLink] = useState("");
   const [actionData, setActionData] = useState("");
+  const [generateData, setGenerateData] = useState({});
   const [postActionData, setPostActionData] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [publication, setPublication] = useState<any | null>(null);
   const [loadingInitialize, setLoadingInitialize] = useState<boolean>(false);
+  const [loadingGenerate, setLoadingGenerate] = useState<boolean>(false);
   const [loadingAct, setLoadingAct] = useState<boolean>(false);
   const [sourceUrl, setSourceUrl] = useState<string | undefined>();
 
@@ -55,6 +57,19 @@ function App() {
       setActionData("Error: " + err);
     }
     setLoadingInitialize(false);
+  };
+
+  const handleGenerate = async () => {
+    try {
+      setLoadingGenerate(true);
+      const result = await nftOpenActionKit.generateUiData({
+        contentURI: nftLink,
+      });
+      setGenerateData(result || "No action data found");
+    } catch (err) {
+      setGenerateData("Error: " + err);
+    }
+    setLoadingGenerate(false);
   };
 
   const handlePostAction = async () => {
@@ -106,6 +121,14 @@ function App() {
         </button>
         {loadingInitialize && <div className="loader" />}
         <div className="result">{actionData}</div>
+      </div>
+      <div className="section">
+        <h2>Generate UI Data</h2>
+        <button className="query" onClick={handleGenerate}>
+          Generate UI Data
+        </button>
+        {loadingGenerate && <div className="loader" />}
+        <div className="result">{JSON.stringify(generateData)}</div>
       </div>
       <div className="section">
         <h2>Action Execute Calldata</h2>
